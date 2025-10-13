@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>BizLearn — Belajar Bisnis Digital untuk Pelajar</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <meta name="description" content="BizLearn - platform belajar interaktif tentang dasar-dasar bisnis digital untuk pemula dan pelajar." />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="#home" class="brand">
+          <!-- simple shop icon -->
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+            <rect x="3" y="7" width="18" height="11" rx="2" fill="#fff" />
+            <path d="M3 7l2-3h14l2 3" stroke="#0b6fb2" stroke-width="1.2" fill="none" />
+            <path d="M8 12h1v4H8zM11 12h1v4h-1zM14 12h1v4h-1z" fill="#0b6fb2" />
+          </svg>
+          <span>BizLearn</span>
+        </a>
+
+        <nav class="nav">
+          <a href="#articles">Artikel</a>
+          <a href="#simulator">Simulasi</a>
+          <a href="#forum">Forum</a>
+          <a href="#about">Tentang</a>
+          <a href="blog.html">Blog Pengguna</a>
+        </nav>
+        <div id="user-area" style="margin-left:12px"></div>
+      </div>
+    </header>
+
+    <main>
+      <section id="home" class="hero">
+        <div class="container hero-inner">
+          <div class="hero-text">
+            <h1>BizLearn — Belajar Bisnis Digital Sederhana</h1>
+            <p class="lead">Platform interaktif untuk pelajar & pemula yang ingin memahami modal, harga, keuntungan, dan promosi online dengan cara praktis dan menyenangkan. Disini kalian tidak hanya diajarkan melalu sistem tetapi kalian bisa berbicara dengan pembisnins lain untuk memberikan kalian saran dan masukan.</p>
+            <div class="hero-cta">
+              <a class="btn primary" href="#simulator">Coba Simulasi</a>
+              <a class="btn ghost" href="#articles">Baca Artikel</a>
+              <button id="learn-more" class="btn ghost">Pelajari Lebih Lanjut</button>
+            </div>
+          </div>
+          <div class="hero-illus">
+            <!-- illustrative graphic (SVG) -->
+            <svg width="280" height="200" viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+              <rect x="10" y="40" width="120" height="100" rx="8" fill="#eaf8ff" stroke="#cceaf9"/>
+              <rect x="150" y="20" width="120" height="140" rx="8" fill="#f7fbff" stroke="#dceffb"/>
+              <circle cx="90" cy="90" r="10" fill="#0b6fb2"/>
+              <rect x="165" y="40" width="80" height="20" rx="6" fill="#bfe6ff"/>
+              <path d="M40 150 L90 120 L140 150" stroke="#0b6fb2" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <section id="articles" class="section">
+        <div class="container">
+          <h2>Artikel Edukasi</h2>
+          <p class="muted">Kumpulan artikel singkat yang mudah dipahami untuk memulai bisnis digital.</p>
+          <div class="articles-slider">
+            <div id="articles-list" class="slider-track" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="simulator" class="section light">
+        <div class="container">
+          <h2>Simulasi Keuntungan</h2>
+          <p class="muted">Masukkan angka berikut untuk melihat perkiraan keuntungan bisnismu.</p>
+
+          <div class="sim-grid">
+            <div class="card">
+              <div class="sim-field" data-key="modal">
+                <label>Modal Awal (Rp)</label>
+                <input id="input-modal" type="number" min="0" placeholder="Contoh: 100000" />
+              </div>
+
+              <div class="sim-field" data-key="harga">
+                <label>Harga Jual per Produk (Rp)</label>
+                <input id="input-harga" type="number" min="0" placeholder="Contoh: 15000" />
+              </div>
+
+              <div class="sim-field" data-key="biaya">
+                <label>Biaya Produksi per Produk (Rp)</label>
+                <input id="input-biaya" type="number" min="0" placeholder="Contoh: 8000" />
+              </div>
+
+              <div class="sim-field" data-key="terjual">
+                <label>Jumlah Produk Terjual</label>
+                <input id="input-terjual" type="number" min="0" placeholder="Contoh: 50" />
+              </div>
+
+              <!-- input khusus untuk mode 'average' (comma separated list) -->
+              <div class="sim-field" data-key="list" style="display:none">
+                <label>Daftar Nilai (pisah koma)</label>
+                <input id="input-list" type="text" placeholder="Contoh: 80,90,75,85" />
+              </div>
+
+              <label>Mode Simulasi</label>
+              <select id="sim-mode">
+                <option value="profit">Hitung Keuntungan (profit)</option>
+                <option value="average">Nilai Rata-rata (average)</option>
+                <option value="custom">Simulasi Sederhana (revenue)</option>
+                <option value="hpp">Hitung HPP (total biaya langsung)</option>
+                <option value="hpu">Hitung HPU (harga pokok per unit)</option>
+                <option value="harga_jual">Hitung Harga Jual (dengan margin %)</option>
+                <option value="laba">Hitung Laba (per unit & total)</option>
+                <option value="omzet">Hitung Omzet (total penjualan)</option>
+              </select>
+
+              <div style="display:flex;gap:8px;margin-top:10px">
+                <button id="btn-hitung" class="btn primary">Hitung</button>
+                <button id="btn-sample" class="btn ghost">Contoh</button>
+              </div>
+            </div>
+
+            <div class="card result-card">
+              <h3>Hasil</h3>
+              <div id="result-area" class="result-area">
+                <p class="muted">Masukkan data dan klik "Hitung Keuntungan" untuk melihat hasil.</p>
+              </div>
+              <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+                <button id="btn-save-result" class="btn primary">Simpan Hasil</button>
+                <button id="btn-export-csv" class="btn ghost">Ekspor CSV</button>
+                <button id="btn-print" class="btn ghost">Cetak / Simpan PDF</button>
+                <button id="btn-quiz" class="btn ghost">Coba Tantangan 🔍</button>
+              </div>
+              <!-- Simulations explanation / mini-article -->
+              <div id="sim-info" class="sim-info" style="margin-top:14px"></div>
+              <!-- History panel -->
+              <div id="sim-history" class="card" style="margin-top:14px">
+                <h4 style="margin:0 0 8px">Riwayat Simulasi</h4>
+                <p class="muted" id="history-empty">Belum ada riwayat. Simpan hasil simulasi untuk melihatnya di sini.</p>
+                <div id="history-list" style="display:block"></div>
+                <div style="display:flex;gap:8px;margin-top:8px">
+                  <button id="btn-clear-history" class="btn ghost">Bersihkan Riwayat</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="forum" class="section">
+        <div class="container">
+          <h2>Forum Mini</h2>
+          <p class="muted">Tulis pertanyaan atau pengalaman singkatmu. Komentar akan disimpan di browser (localStorage).</p>
+
+          <div class="card forum-card">
+            <label>Nama</label>
+            <input id="forum-name" type="text" placeholder="Nama kamu" />
+
+            <label>Pesan</label>
+            <textarea id="forum-message" rows="3" placeholder="Tulis pesan singkat..."></textarea>
+
+            <div class="forum-actions">
+              <button id="btn-post" class="btn primary">Kirim</button>
+              <button id="btn-clear" class="btn ghost">Bersihkan Semua</button>
+            </div>
+
+            <div id="comments" class="comments" aria-live="polite"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="section light">
+        <div class="container">
+          <h2>Tentang Kami</h2>
+          <div class="card about-card">
+            <p>BizLearn dibuat untuk membantu pelajar dan pelaku UMKM mempelajari dasar-dasar bisnis digital dengan cara yang sederhana dan praktis. Platform ini menyajikan artikel singkat, simulasi perhitungan keuntungan, serta forum mini untuk berbagi pengalaman. Hal ini didasari pada kurangnya edukasi terhadap pelajar yang ingin membuka kegiatan bisnis dan mengetahui perhitungan dalam dunia bisnis</p>
+            <p>Dibuat oleh: <strong>Alles</strong> — peserta lomba dan pengembang yang ingin meningkatkan minat wirausaha sejak dini.</p>
+            <p class="muted">Pesan: Mulailah kecil, pelajari dari pengalaman, dan gunakan teknologi untuk memperbesar dampak bisnismu.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <small>&copy; BizLearn — 2025 · Dibuat oleh Alles</small>
+      </div>
+    </footer>
+
+    <!-- Article detail modal -->
+    <div id="modal" class="modal" aria-hidden="true">
+      <div class="modal-content" role="dialog" aria-modal="true">
+        <button id="modal-close" class="modal-close" aria-label="Tutup">×</button>
+        <h3 id="modal-title"></h3>
+        <p id="modal-desc"></p>
+      </div>
+    </div>
+
+    <!-- Quiz modal -->
+    <div id="quiz-modal" class="modal" aria-hidden="true">
+      <div class="modal-content" role="dialog" aria-modal="true" style="max-width:420px;">
+        <button id="quiz-close" class="modal-close" aria-label="Tutup">×</button>
+        <h3 id="quiz-title">Tantangan Singkat</h3>
+        <div id="quiz-body">
+          <p id="quiz-question" class="muted">[Pertanyaan akan muncul di sini]</p>
+          <label>Jawaban</label>
+          <input id="quiz-answer" type="text" placeholder="Masukkan jawaban (angka)" />
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button id="quiz-submit" class="btn primary">Periksa Jawaban</button>
+            <button id="quiz-skip" class="btn ghost">Lewati</button>
+          </div>
+          <div id="quiz-feedback" style="margin-top:10px"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Auth modal -->
+    <div id="auth-modal" class="modal" aria-hidden="true">
+      <div class="modal-content" role="dialog" aria-modal="true" style="max-width:420px;">
+        <button id="auth-close" class="modal-close" aria-label="Tutup">×</button>
+        <h3 id="auth-title">Masuk / Daftar</h3>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <button id="show-login" class="btn small btn-load">Masuk</button>
+          <button id="show-register" class="btn small btn-delete">Daftar</button>
+        </div>
+        <div id="auth-login" style="display:none">
+          <label>Username</label>
+          <input id="login-username" type="text" />
+          <label>Password</label>
+          <input id="login-password" type="password" />
+          <div style="display:flex;gap:8px;margin-top:8px"><button id="btn-login" class="btn primary">Masuk</button></div>
+        </div>
+        <div id="auth-register" style="display:none">
+          <label>Username</label>
+          <input id="reg-username" type="text" />
+          <label>Password</label>
+          <input id="reg-password" type="password" />
+          <div style="display:flex;gap:8px;margin-top:8px"><button id="btn-register" class="btn primary">Daftar</button></div>
+        </div>
+        <div id="auth-feedback" style="margin-top:10px" class="muted"></div>
+      </div>
+    </div>
+
+    <script src="js/app.js" defer></script>
+  </body>
+</html>

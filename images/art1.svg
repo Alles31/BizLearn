@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="420" viewBox="0 0 800 420" role="img" aria-label="Gambar Modal Usaha">
+  <rect width="100%" height="100%" fill="#eaf8ff"/>
+  <rect x="40" y="60" width="200" height="140" rx="12" fill="#0b6fb2" opacity="0.12"/>
+  <rect x="260" y="80" width="420" height="240" rx="14" fill="#bfe6ff"/>
+  <text x="50%" y="50%" text-anchor="middle" fill="#0b6fb2" font-size="34" font-family="Segoe UI, Roboto, Arial" dy="10">Modal Usaha</text>
+</svg>

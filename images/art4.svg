@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="420" viewBox="0 0 800 420" role="img" aria-label="Gambar Manajemen Waktu">
+  <rect width="100%" height="100%" fill="#fffaf6"/>
+  <rect x="60" y="80" width="200" height="120" rx="10" fill="#ffd6d6"/>
+  <rect x="300" y="90" width="380" height="200" rx="12" fill="#ffeceb"/>
+  <text x="50%" y="50%" text-anchor="middle" fill="#b91c1c" font-size="34" font-family="Segoe UI, Roboto, Arial" dy="10">Manajemen Waktu</text>
+</svg>
