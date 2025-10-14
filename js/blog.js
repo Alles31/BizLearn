@@ -26,7 +26,7 @@ function renderArticles(filter) {
     return;
   }
   filtered.forEach((art, idx) => {
-    const globalIndex = articles.indexOf(art); // map back to original index for comments
+    const globalIndex = articles.indexOf(art);
     const card = document.createElement('div');
     card.className = 'card';
     card.style.marginBottom = '24px';
@@ -40,22 +40,18 @@ function renderArticles(filter) {
       <div id="comments-${globalIndex}" class="comments-section"></div>
     `;
     container.appendChild(card);
-    // attach delete handler
     const delBtn = card.querySelector('.btn-delete-article');
     if (delBtn) {
       delBtn.addEventListener('click', function () {
         if (!confirm('Hapus artikel ini beserta semua komentarnya?')) return;
         const articles = getArticles();
         const idxToRemove = Number(this.dataset.idx);
-        // remove article
         if (idxToRemove >= 0 && idxToRemove < articles.length) {
           articles.splice(idxToRemove, 1);
           saveArticles(articles);
         }
-        // remove associated comments (comments stored by article index) - rebuild comments map
         const comments = getComments();
         const newComments = {};
-        // iterate through old comments keys and shift indexes > removed index down by 1
         Object.keys(comments).map(k => Number(k)).sort((a,b)=>a-b).forEach(oldIdx => {
           if (oldIdx === idxToRemove) return; // drop
           const newIdx = oldIdx > idxToRemove ? oldIdx - 1 : oldIdx;
@@ -188,7 +184,6 @@ if (clearBtn) {
 
 document.addEventListener('DOMContentLoaded', function() { renderArticles(); });
 
-// --- render current logged-in user in blog header ---
 const SESSION_KEY = 'bizlearn_session_v1';
 function loadSession(){ try{ const raw = localStorage.getItem(SESSION_KEY); return raw?JSON.parse(raw):null }catch(e){return null} }
 function clearSession(){ localStorage.removeItem(SESSION_KEY); }
@@ -212,5 +207,4 @@ function renderBlogUserArea(){
 }
 renderBlogUserArea();
 
-// update UI when session changed in another tab/window
 window.addEventListener('storage', (e)=>{ if(e.key === SESSION_KEY){ renderBlogUserArea(); } });

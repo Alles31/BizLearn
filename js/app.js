@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const card = document.createElement('article');
       card.className = 'card';
       const imgUrl = a.image || `https://via.placeholder.com/800x420?text=Artikel+${a.id}`;
-      // add onerror fallback so  a broken SVG doesn't leave an empty image
       card.innerHTML = `
         <img src="${imgUrl}" onerror="this.onerror=null;this.src='images/art1.svg'" alt="${a.title}" style="width:100%;height:160px;border-radius:8px;object-fit:cover;margin-bottom:12px" />
         <h3 style="margin:0 0 8px">${a.title}</h3>
@@ -108,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
       _animHandle = requestAnimationFrame(step);
     });
   }
-  // Chart management
   let __chartInstance = null;
   const chartCanvas = document.getElementById('result-chart');
   function destroyChart(){ if(__chartInstance){ __chartInstance.destroy(); __chartInstance = null; } }
@@ -117,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
     destroyChart();
     try{
       if(!r) return;
-      // Prepare data depending on mode
       let labels = [], data = [], colors = [];
       if(r.mode === 'profit' && r.inputs){
         const modal = Number(r.inputs.modalAwal || 0);
@@ -133,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
         data = [omzet, Math.max(0, approxCost)];
         colors = ['#0b6fb2','#f59e0b'];
       } else {
-        // fallback: show value vs zero
         labels = [r.label || 'Hasil', 'Sisa'];
         const v = Number(r.value) || 0;
         data = [Math.abs(v), Math.max(0, (Math.abs(v) * 0.2))];
@@ -149,7 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   function runSimulation(){
     const mode = $simMode?.value || 'profit';
-    // We'll collect a result object to allow saving to history
     let lastResult = null;
     if(mode === 'profit'){
       const modalAwal = Number($modal.value || 0);

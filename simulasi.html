@@ -10,7 +10,11 @@
     <header class="site-header">
       <div class="container header-inner">
         <a href="index.html" class="brand"><span>BizLearn</span></a>
-        <nav class="nav"><a href="index.html">Home</a><a href="blog.html">Blog Pengguna</a><a href="about.html">About</a></nav>
+        <nav class="nav">
+          <a href="index.html">Home</a>
+          <a href="blog.html">Blog Pengguna</a>
+          <a href="about.html">About</a>
+        </nav>
         <div id="user-area"></div>
       </div>
     </header>
@@ -47,7 +51,6 @@
                 <label style="margin:0">Margin (%)</label>
                 <input id="sim-margin" type="number" min="0" value="20" style="width:80px" />
               </div>
-              <!-- per-pcs inputs removed to revert to original simulator state -->
               <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
                 <button id="save-sim" class="btn primary">Simpan Simulasi</button>
                 <button id="print-sim" class="btn ghost">Cetak / Download PDF</button>
@@ -69,7 +72,6 @@
               </div>
             </div>
 
-            <!-- compact BEP summary (integrated) -->
             <div style="display:flex;gap:12px;margin-top:8px;align-items:center;flex-wrap:wrap">
               <div style="display:flex;flex-direction:column"><small class="muted">Biaya Tetap (Rp)</small><input id="sim-fixed-cost" type="number" min="0" value="0" style="width:140px;padding:6px;border:1px solid #ddd;border-radius:4px" /></div>
               <div><small class="muted">BEP Unit</small><div id="bep-units-mini" style="font-weight:700">-</div></div>
@@ -100,10 +102,37 @@
         <small>&copy; BizLearn — 2025</small>
       </div>
     </footer>
+  
+  <div id="auth-modal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" style="max-width:420px;">
+      <button id="auth-close" class="modal-close" aria-label="Tutup">×</button>
+      <h3 id="auth-title">Masuk / Daftar</h3>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <button id="show-login" class="btn small btn-load">Masuk</button>
+        <button id="show-register" class="btn small btn-delete">Daftar</button>
+      </div>
+      <div id="auth-login" style="display:none">
+        <label>Username</label>
+        <input id="login-username" type="text" />
+        <label>Password</label>
+        <input id="login-password" type="password" />
+        <div style="display:flex;gap:8px;margin-top:8px"><button id="btn-login" class="btn primary">Masuk</button></div>
+      </div>
+      <div id="auth-register" style="display:none">
+        <label>Username</label>
+        <input id="reg-username" type="text" />
+        <label>Password</label>
+        <input id="reg-password" type="password" />
+        <div style="display:flex;gap:8px;margin-top:8px"><button id="btn-register" class="btn primary">Daftar</button></div>
+      </div>
+      <div id="auth-feedback" style="margin-top:10px" class="muted"></div>
+    </div>
+  </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="js/simulasi.js" defer></script>
+  <script src="js/app.js" defer></script>
   </body>
 </html>

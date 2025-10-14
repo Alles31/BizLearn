@@ -47,19 +47,16 @@ document.addEventListener('DOMContentLoaded', () => {
     $list.appendChild(table);
     if($total) $total.textContent = toRp(tot);
 
-    // update price per unit and recommended price
     const units = Number($units?.value || 1);
     const marginPct = Number($margin?.value || 0);
     const perUnit = units > 0 ? Math.round(tot / units) : 0;
     const recPrice = Math.round(perUnit + (marginPct/100) * perUnit);
     if($ppu) $ppu.textContent = toRp(perUnit);
     if($rec) $rec.textContent = toRp(recPrice);
-    // estimated profit and final total
     const estimatedProfit = Math.round((recPrice - perUnit) * units);
     const finalTotalVal = Math.round(recPrice * units);
     if($estProfit) $estProfit.textContent = toRp(estimatedProfit);
     if($finalTotal) $finalTotal.textContent = toRp(finalTotalVal);
-    // apply color classes based on sign
     if($estProfit){
       $estProfit.classList.remove('text-danger','text-success');
       if(estimatedProfit < 0) $estProfit.classList.add('text-danger'); else $estProfit.classList.add('text-success');
@@ -68,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if($finalTotal){ $finalTotal.title = 'Total pendapatan yang diharapkan'; }
 
     $list.querySelectorAll('.btn-delete').forEach(b => b.addEventListener('click', (e)=>{ const i = Number(e.target.dataset.idx); state.materials.splice(i,1); saveState(state); renderMaterials(); }));
-      // update BEP display
       try{ if(typeof computeBEP === 'function') computeBEP(); }catch(e){ /* ignore */ }
   }
 
@@ -134,7 +130,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } finally { document.body.removeChild(container); }
   }
 
-  // Print: generate PDF from the minimal printable HTML (only filled input/results)
   $print?.addEventListener('click', async ()=>{
     try{
       const html = buildPrintable();
@@ -159,7 +154,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return tpl;
   }
 
-  // Break-even point calculation (simple): BEP units = ceil(fixed / (price - variable_per_unit))
   function computeBEP(){
     try{
       const fixed = Number($fixed?.value || 0);
@@ -183,7 +177,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }catch(e){ console.error('BEP compute error', e); return null; }
   }
 
-  // --- history functions ---
   const $historyList = document.getElementById('sim-history-list');
   const $btnClearAll = document.getElementById('btn-clear-all-sim');
 
@@ -203,7 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
       $historyList.appendChild(div);
     });
 
-    // attach handlers
     $historyList.querySelectorAll('[data-load]').forEach(b=> b.addEventListener('click', (e)=>{ const i = Number(e.target.dataset.load); loadEntry(i); }));
     $historyList.querySelectorAll('[data-print]').forEach(b=> b.addEventListener('click', (e)=>{ const i = Number(e.target.dataset.print); printEntry(i); }));
     $historyList.querySelectorAll('[data-del]').forEach(b=> b.addEventListener('click', (e)=>{ const i = Number(e.target.dataset.del); deleteEntry(i); }));
@@ -215,11 +207,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function clearHistory(){ if(!confirm('Bersihkan seluruh riwayat simulasi?')) return; saveHistory([]); renderHistory(); }
 
-  function printEntry(i){ const arr = loadHistory(); const e = arr[i]; if(!e) return; // temporarily set form + state then call PDF generator
+  function printEntry(i){ const arr = loadHistory(); const e = arr[i]; if(!e) return;
     const prevState = { title: $title?.value, desc: $desc?.value, notes: $notes?.value, materials: state.materials.slice() };
     $title.value = e.title||''; $desc.value = e.desc||''; $notes.value = e.notes||''; state.materials = (e.materials||[]).slice(); renderMaterials();
     (async ()=>{ try{ const html = buildPrintable(); await generatePdfFromHtml(html, (String(e.title||'simulasi').trim()||'simulasi')); }catch(err){ console.error(err); alert('Gagal membuat PDF: '+ (err && err.message)); } })();
-    // restore previous
     $title.value = prevState.title; $desc.value = prevState.desc; $notes.value = prevState.notes; state.materials = prevState.materials; renderMaterials();
   }
 
