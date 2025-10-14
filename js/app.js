@@ -108,6 +108,45 @@ document.addEventListener('DOMContentLoaded', () => {
       _animHandle = requestAnimationFrame(step);
     });
   }
+  // Chart management
+  let __chartInstance = null;
+  const chartCanvas = document.getElementById('result-chart');
+  function destroyChart(){ if(__chartInstance){ __chartInstance.destroy(); __chartInstance = null; } }
+  function renderChartForResult(r){
+    if(!chartCanvas) return;
+    destroyChart();
+    try{
+      if(!r) return;
+      // Prepare data depending on mode
+      let labels = [], data = [], colors = [];
+      if(r.mode === 'profit' && r.inputs){
+        const modal = Number(r.inputs.modalAwal || 0);
+        const keuntungan = Math.max(0, Number(r.value) || 0);
+        const lossPart = Math.max(0, modal - (Number(r.value) < 0 ? Math.abs(Number(r.value)) : 0));
+        labels = ['Modal','Laba / (Rugi)'];
+        data = [modal, Math.abs(Number(r.value))];
+        colors = ['#0b6fb2','#10b981'];
+      } else if(r.mode === 'omzet' && r.inputs){
+        labels = ['Omzet','HPP/Laba'];
+        const omzet = Number(r.value) || 0;
+        const approxCost = Number(r.inputs.hargaJual||0) * 0.6 * (Number(r.inputs.units||1));
+        data = [omzet, Math.max(0, approxCost)];
+        colors = ['#0b6fb2','#f59e0b'];
+      } else {
+        // fallback: show value vs zero
+        labels = [r.label || 'Hasil', 'Sisa'];
+        const v = Number(r.value) || 0;
+        data = [Math.abs(v), Math.max(0, (Math.abs(v) * 0.2))];
+        colors = ['#0b6fb2','#e5e7eb'];
+      }
+      const cfg = {
+        type: 'pie',
+        data: { labels, datasets: [{ data, backgroundColor: colors }] },
+        options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+      };
+      __chartInstance = new Chart(chartCanvas.getContext('2d'), cfg);
+    }catch(e){ console.warn('Chart error', e); }
+  }
   function runSimulation(){
     const mode = $simMode?.value || 'profit';
     // We'll collect a result object to allow saving to history
@@ -125,9 +164,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const elMsg = document.getElementById('result-msg');
       animateNumber(keuntunganBersih, { duration: 900, start: 0, formatter: toRp, onUpdate(v){ elNum.textContent = toRp(Math.round(v)); } })
         .then(()=>{ elMsg.textContent = (keuntunganBersih>=0? 'Keren! Kamu untung ':'Hati-hati, kamu rugi ') + toRp(Math.abs(keuntunganBersih)); });
-  lastResult = { mode: 'profit', label: 'Keuntungan Bersih', value: keuntunganBersih, currency: true, inputs: { modalAwal, harga, biaya, terjual } };
-  window.__lastSimResult = lastResult;
-  return;
+      lastResult = { mode: 'profit', label: 'Keuntungan Bersih', value: keuntunganBersih, currency: true, inputs: { modalAwal, harga, biaya, terjual } };
+      window.__lastSimResult = lastResult;
+      renderChartForResult(lastResult);
+      return;
     }
     if(mode === 'average'){
       const raw = String($list?.value || '');
@@ -143,6 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(()=>{ elMsgA.textContent = `Rata-rata dari ${nums.length} nilai.`; });
   lastResult = { mode: 'average', label: 'Rata-rata', value: avg, currency: false, inputs: { values: nums } };
   window.__lastSimResult = lastResult;
+  renderChartForResult(lastResult);
   return;
     }
     if(mode === 'hpp'){
@@ -156,6 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
       animateNumber(total, { duration: 800, onUpdate(v){ elNum.textContent = toRp(Math.round(v)); } }).then(()=>{ elMsg.textContent = `HPP total dari ${nums.length} item.`; });
   lastResult = { mode: 'hpp', label: 'HPP Total', value: total, currency: true, inputs: { items: nums } };
   window.__lastSimResult = lastResult;
+  renderChartForResult(lastResult);
   return;
     }
     if(mode === 'hpu'){
@@ -170,6 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
       animateNumber(hpu, { duration: 800, onUpdate(v){ elNum.textContent = toRp(Math.round(v)); } }).then(()=>{ elMsg.textContent = `HPU = ${toRp(Math.round(hpu))} per unit (dari HPP ${toRp(total)} ÷ ${units} unit).`; });
   lastResult = { mode: 'hpu', label: 'HPU per unit', value: hpu, currency: true, inputs: { total, units } };
   window.__lastSimResult = lastResult;
+  renderChartForResult(lastResult);
   return;
     }
     if(mode === 'harga_jual'){
@@ -182,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
       animateNumber(harga, { duration: 800, onUpdate(v){ elNum.textContent = toRp(Math.round(v)); } }).then(()=>{ elMsg.textContent = `Harga jual dengan margin ${marginPct}% = ${toRp(Math.round(harga))}`; });
   lastResult = { mode: 'harga_jual', label: 'Harga Jual', value: harga, currency: true, inputs: { biayaPer, marginPct } };
   window.__lastSimResult = lastResult;
+  renderChartForResult(lastResult);
   return;
     }
     if(mode === 'laba'){
@@ -196,6 +240,7 @@ document.addEventListener('DOMContentLoaded', () => {
       animateNumber(labaTotal, { duration: 900, onUpdate(v){ elNum.textContent = toRp(Math.round(v)); } }).then(()=>{ elMsg.textContent = `Laba per unit ${toRp(Math.round(labaPer))} · Total ${toRp(Math.round(labaTotal))} dari ${units} unit.`; });
   lastResult = { mode: 'laba', label: 'Laba Total', value: labaTotal, currency: true, inputs: { hargaJual, hppPer, units } };
   window.__lastSimResult = lastResult;
+  renderChartForResult(lastResult);
   return;
     }
     if(mode === 'omzet'){
@@ -208,6 +253,7 @@ document.addEventListener('DOMContentLoaded', () => {
       animateNumber(omzet, { duration: 800, onUpdate(v){ elNum.textContent = toRp(Math.round(v)); } }).then(()=>{ elMsg.textContent = `Omzet total = ${toRp(Math.round(omzet))} dari ${units} unit.`; });
   lastResult = { mode: 'omzet', label: 'Omzet', value: omzet, currency: true, inputs: { hargaJual, units } };
   window.__lastSimResult = lastResult;
+  renderChartForResult(lastResult);
   return;
     }
     if(mode === 'custom'){
@@ -222,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(()=>{ elMsgC.textContent = 'Total estimasi biaya.'; });
   lastResult = { mode: 'custom', label: 'Total Estimasi', value: total, currency: true, inputs: { biayaVal, qty } };
   window.__lastSimResult = lastResult;
+  renderChartForResult(lastResult);
   return;
     }
     // expose lastResult for external use (save button)

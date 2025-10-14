@@ -11,7 +11,6 @@
     <header class="site-header">
       <div class="container header-inner">
         <a href="#home" class="brand">
-          <!-- simple shop icon -->
           <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
             <rect x="3" y="7" width="18" height="11" rx="2" fill="#fff" />
             <path d="M3 7l2-3h14l2 3" stroke="#0b6fb2" stroke-width="1.2" fill="none" />
@@ -21,13 +20,12 @@
         </a>
 
         <nav class="nav">
-          <a href="#articles">Artikel</a>
-          <a href="#simulator">Simulasi</a>
-          <a href="#forum">Forum</a>
-          <a href="#about">Tentang</a>
+          <a href="index.html">Home</a>
+          <a href="simulasi.html">Simulasi</a>
+          <a href="about.html">About</a>
           <a href="blog.html">Blog Pengguna</a>
         </nav>
-        <div id="user-area" style="margin-left:12px"></div>
+        <div id="user-area"></div>
       </div>
     </header>
 
@@ -44,7 +42,6 @@
             </div>
           </div>
           <div class="hero-illus">
-            <!-- illustrative graphic (SVG) -->
             <svg width="280" height="200" viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" aria-hidden>
               <rect x="10" y="40" width="120" height="100" rx="8" fill="#eaf8ff" stroke="#cceaf9"/>
               <rect x="150" y="20" width="120" height="140" rx="8" fill="#f7fbff" stroke="#dceffb"/>
@@ -93,7 +90,6 @@
                 <input id="input-terjual" type="number" min="0" placeholder="Contoh: 50" />
               </div>
 
-              <!-- input khusus untuk mode 'average' (comma separated list) -->
               <div class="sim-field" data-key="list" style="display:none">
                 <label>Daftar Nilai (pisah koma)</label>
                 <input id="input-list" type="text" placeholder="Contoh: 80,90,75,85" />
@@ -115,6 +111,10 @@
                 <button id="btn-hitung" class="btn primary">Hitung</button>
                 <button id="btn-sample" class="btn ghost">Contoh</button>
               </div>
+              <div id="sim-chart" class="card" style="margin-top:14px">
+                <h4 style="margin:0 0 8px">Visualisasi Hasil</h4>
+                <canvas id="result-chart" width="400" height="240"></canvas>
+              </div>
             </div>
 
             <div class="card result-card">
@@ -123,14 +123,12 @@
                 <p class="muted">Masukkan data dan klik "Hitung Keuntungan" untuk melihat hasil.</p>
               </div>
               <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
-                <button id="btn-save-result" class="btn primary">Simpan Hasil</button>
+                <button id="btn-save-result" class="btn ghost">Simpan Hasil</button>
                 <button id="btn-export-csv" class="btn ghost">Ekspor CSV</button>
                 <button id="btn-print" class="btn ghost">Cetak / Simpan PDF</button>
-                <button id="btn-quiz" class="btn ghost">Coba Tantangan 🔍</button>
+                <button id="btn-quiz" class="btn ghost">Coba Tantangan</button>
               </div>
-              <!-- Simulations explanation / mini-article -->
               <div id="sim-info" class="sim-info" style="margin-top:14px"></div>
-              <!-- History panel -->
               <div id="sim-history" class="card" style="margin-top:14px">
                 <h4 style="margin:0 0 8px">Riwayat Simulasi</h4>
                 <p class="muted" id="history-empty">Belum ada riwayat. Simpan hasil simulasi untuk melihatnya di sini.</p>
@@ -138,7 +136,7 @@
                 <div style="display:flex;gap:8px;margin-top:8px">
                   <button id="btn-clear-history" class="btn ghost">Bersihkan Riwayat</button>
                 </div>
-              </div>
+              </div>             
             </div>
           </div>
         </div>
@@ -184,7 +182,6 @@
       </div>
     </footer>
 
-    <!-- Article detail modal -->
     <div id="modal" class="modal" aria-hidden="true">
       <div class="modal-content" role="dialog" aria-modal="true">
         <button id="modal-close" class="modal-close" aria-label="Tutup">×</button>
@@ -238,6 +235,7 @@
       </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js/app.js" defer></script>
   </body>
 </html>

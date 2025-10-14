@@ -36,9 +36,35 @@ function renderArticles(filter) {
       <p>${escapeHTML(art.desc)}</p>
       ${art.image ? `<img src="${escapeHTML(art.image)}" alt="Gambar artikel" style="max-width:100%;max-height:180px;margin-bottom:8px;border-radius:8px;" />` : ''}
       <div style="white-space:pre-line;margin-bottom:8px">${escapeHTML(art.content)}</div>
+      <div style="text-align:right;margin-bottom:8px"><button class="btn small btn-delete-article" data-idx="${globalIndex}">Hapus Artikel</button></div>
       <div id="comments-${globalIndex}" class="comments-section"></div>
     `;
     container.appendChild(card);
+    // attach delete handler
+    const delBtn = card.querySelector('.btn-delete-article');
+    if (delBtn) {
+      delBtn.addEventListener('click', function () {
+        if (!confirm('Hapus artikel ini beserta semua komentarnya?')) return;
+        const articles = getArticles();
+        const idxToRemove = Number(this.dataset.idx);
+        // remove article
+        if (idxToRemove >= 0 && idxToRemove < articles.length) {
+          articles.splice(idxToRemove, 1);
+          saveArticles(articles);
+        }
+        // remove associated comments (comments stored by article index) - rebuild comments map
+        const comments = getComments();
+        const newComments = {};
+        // iterate through old comments keys and shift indexes > removed index down by 1
+        Object.keys(comments).map(k => Number(k)).sort((a,b)=>a-b).forEach(oldIdx => {
+          if (oldIdx === idxToRemove) return; // drop
+          const newIdx = oldIdx > idxToRemove ? oldIdx - 1 : oldIdx;
+          newComments[newIdx] = comments[oldIdx];
+        });
+        saveComments(newComments);
+        renderArticles();
+      });
+    }
     renderComments(globalIndex);
   });
 }
@@ -161,3 +187,30 @@ if (clearBtn) {
 }
 
 document.addEventListener('DOMContentLoaded', function() { renderArticles(); });
+
+// --- render current logged-in user in blog header ---
+const SESSION_KEY = 'bizlearn_session_v1';
+function loadSession(){ try{ const raw = localStorage.getItem(SESSION_KEY); return raw?JSON.parse(raw):null }catch(e){return null} }
+function clearSession(){ localStorage.removeItem(SESSION_KEY); }
+function renderBlogUserArea(){
+  const root = document.getElementById('user-area');
+  if(!root) return;
+  const sess = loadSession();
+  root.innerHTML = '';
+  if(!sess){
+    const a = document.createElement('a');
+    a.href = 'index.html';
+    a.className = 'btn ghost';
+    a.textContent = 'Masuk';
+    root.appendChild(a);
+    return;
+  }
+  const wrap = document.createElement('div'); wrap.style.display='flex'; wrap.style.alignItems='center'; wrap.style.gap='8px';
+  const name = document.createElement('div'); name.style.color='#fff'; name.style.fontWeight='700'; name.textContent = sess.username;
+  const btn = document.createElement('button'); btn.className='btn small'; btn.textContent='Keluar'; btn.addEventListener('click', ()=>{ if(!confirm('Keluar dari sesi?')) return; clearSession(); renderBlogUserArea(); });
+  wrap.appendChild(name); wrap.appendChild(btn); root.appendChild(wrap);
+}
+renderBlogUserArea();
+
+// update UI when session changed in another tab/window
+window.addEventListener('storage', (e)=>{ if(e.key === SESSION_KEY){ renderBlogUserArea(); } });
