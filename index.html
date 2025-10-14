@@ -145,12 +145,10 @@
       <section id="forum" class="section">
         <div class="container">
           <h2>Forum Mini</h2>
-          <p class="muted">Tulis pertanyaan atau pengalaman singkatmu. Komentar akan disimpan di browser (localStorage).</p>
+          <p class="muted">Tulis pertanyaan atau pengalaman singkatmu. <strong>Login diperlukan</strong> untuk mengirim pesan.</p>
 
           <div class="card forum-card">
-            <label>Nama</label>
-            <input id="forum-name" type="text" placeholder="Nama kamu" />
-
+            <div id="forum-user-status" style="margin-bottom: 12px; font-size: 14px;"></div>
             <label>Pesan</label>
             <textarea id="forum-message" rows="3" placeholder="Tulis pesan singkat..."></textarea>
 

@@ -1,4 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // Auth helper functions
+  function loadSession(){ try{ const raw = localStorage.getItem('bizlearn_session_v1'); return raw?JSON.parse(raw):null }catch(e){return null} }
+  function getUserKey(baseKey){ const sess = loadSession(); return sess ? `${baseKey}_user_${sess.username}` : baseKey; }
+  
   const MAT_KEY = 'bizlearn_full_sim_v1';
   const $title = document.getElementById('sim-title');
   const $desc = document.getElementById('sim-desc');
@@ -22,8 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function toRp(n){ return 'Rp ' + Number(n).toLocaleString('id-ID'); }
   function escapeHtml(s){ return String(s).replace(/[&<>'"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[c]); }
 
-  function loadState(){ try{ return JSON.parse(localStorage.getItem(MAT_KEY) || '{}'); }catch(e){ return {}; } }
-  function saveState(s){ localStorage.setItem(MAT_KEY, JSON.stringify(s)); }
+  function loadState(){ try{ return JSON.parse(localStorage.getItem(getUserKey(MAT_KEY)) || '{}'); }catch(e){ return {}; } }
+  function saveState(s){ localStorage.setItem(getUserKey(MAT_KEY), JSON.stringify(s)); }
 
   let state = loadState();
   state.materials = state.materials || [];
@@ -86,8 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const entry = {
       title: $title?.value.trim(), desc: $desc?.value.trim(), notes: $notes?.value.trim(), materials: state.materials.slice(), time: Date.now(), units, marginPct, perUnit, recPrice
     };
-    const arr = JSON.parse(localStorage.getItem(MAT_KEY + '_list') || '[]');
-    arr.push(entry); localStorage.setItem(MAT_KEY + '_list', JSON.stringify(arr));
+    const arr = JSON.parse(localStorage.getItem(getUserKey(MAT_KEY + '_list')) || '[]');
+    arr.push(entry); localStorage.setItem(getUserKey(MAT_KEY + '_list'), JSON.stringify(arr));
     alert('Simulasi disimpan. Kamu bisa mencetaknya dari tombol Cetak.');
     renderHistory();
   });
@@ -180,8 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const $historyList = document.getElementById('sim-history-list');
   const $btnClearAll = document.getElementById('btn-clear-all-sim');
 
-  function loadHistory(){ return JSON.parse(localStorage.getItem(MAT_KEY + '_list') || '[]'); }
-  function saveHistory(arr){ localStorage.setItem(MAT_KEY + '_list', JSON.stringify(arr)); }
+  function loadHistory(){ return JSON.parse(localStorage.getItem(getUserKey(MAT_KEY + '_list')) || '[]'); }
+  function saveHistory(arr){ localStorage.setItem(getUserKey(MAT_KEY + '_list'), JSON.stringify(arr)); }
 
   function renderHistory(){
     if(!$historyList) return;

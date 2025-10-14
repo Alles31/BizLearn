@@ -100,6 +100,32 @@
       </div>
     </footer>
 
+    <div id="auth-modal" class="modal" aria-hidden="true">
+      <div class="modal-content" role="dialog" aria-modal="true" style="max-width:420px;">
+        <button id="auth-close" class="modal-close" aria-label="Tutup">×</button>
+        <h3 id="auth-title">Masuk / Daftar</h3>
+        <div style="display:flex;gap:8px;margin-bottom:8px">
+          <button id="show-login" class="btn small btn-load">Masuk</button>
+          <button id="show-register" class="btn small btn-delete">Daftar</button>
+        </div>
+        <div id="auth-login" style="display:none">
+          <label>Username</label>
+          <input id="login-username" type="text" />
+          <label>Password</label>
+          <input id="login-password" type="password" />
+          <div style="display:flex;gap:8px;margin-top:8px"><button id="btn-login" class="btn primary">Masuk</button></div>
+        </div>
+        <div id="auth-register" style="display:none">
+          <label>Username</label>
+          <input id="reg-username" type="text" />
+          <label>Password</label>
+          <input id="reg-password" type="password" />
+          <div style="display:flex;gap:8px;margin-top:8px"><button id="btn-register" class="btn primary">Daftar</button></div>
+        </div>
+        <div id="auth-feedback" style="margin-top:10px" class="muted"></div>
+      </div>
+    </div>
+
     <script src="js/app.js" defer></script>
   </body>
 </html>

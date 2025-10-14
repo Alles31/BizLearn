@@ -431,7 +431,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  const $name = document.getElementById('forum-name');
   const $message = document.getElementById('forum-message');
   const $btnPost = document.getElementById('btn-post');
   const $btnClear = document.getElementById('btn-clear');
@@ -464,7 +463,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // seed admin if missing
   (function ensureAdmin(){ const users = loadUsers(); if(!users.find(u=>u.username==='admin')){ users.push({ username:'admin', password:'admin', role:'admin' }); saveUsers(users); }})();
 
-  function renderUserArea(){ const sess = loadSession(); if(!userArea) return; userArea.innerHTML = ''; if(!sess){ const a = document.createElement('button'); a.className='btn ghost'; a.textContent='Masuk'; a.addEventListener('click', ()=>{ authModal.setAttribute('aria-hidden','false'); authLoginBox.style.display='block'; authRegisterBox.style.display='none'; authFeedback.textContent=''; }); userArea.appendChild(a); } else { const span = document.createElement('div'); span.style.display='flex'; span.style.alignItems='center'; span.style.gap='8px'; span.innerHTML = `<div style="color:#fff;font-weight:700">${escapeHtml(sess.username)}</div>`; const btnOut = document.createElement('button'); btnOut.className='btn small'; btnOut.textContent='Keluar'; btnOut.addEventListener('click', ()=>{ clearSession(); renderUserArea(); renderComments(); }); span.appendChild(btnOut); userArea.appendChild(span); } }
+  function renderUserArea(){ const sess = loadSession(); if(!userArea) return; userArea.innerHTML = ''; if(!sess){ const a = document.createElement('button'); a.className='btn ghost'; a.textContent='Masuk'; a.addEventListener('click', ()=>{ authModal.setAttribute('aria-hidden','false'); authLoginBox.style.display='block'; authRegisterBox.style.display='none'; authFeedback.textContent=''; }); userArea.appendChild(a); } else { const span = document.createElement('div'); span.style.display='flex'; span.style.alignItems='center'; span.style.gap='8px'; span.innerHTML = `<div style="color:#fff;font-weight:700">${escapeHtml(sess.username)}</div>`; const btnOut = document.createElement('button'); btnOut.className='btn small'; btnOut.textContent='Keluar'; btnOut.addEventListener('click', ()=>{ clearSession(); renderUserArea(); renderComments(); renderHistory(); }); span.appendChild(btnOut); userArea.appendChild(span); } updateForumStatus(); }
   renderUserArea();
 
   if(authClose) authClose.addEventListener('click', ()=>{ authModal.setAttribute('aria-hidden','true'); });
@@ -481,7 +480,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const u = String(loginUsername.value||'').trim(); const p = String(loginPassword.value||'').trim(); if(!u||!p){ authFeedback.textContent='Isi username & password.'; return; }
     const users = loadUsers(); const found = users.find(x=>x.username===u && x.password===p);
     if(!found){ authFeedback.textContent='Username atau password salah.'; return; }
-    saveSession({ username: found.username, role: found.role }); authModal.setAttribute('aria-hidden','true'); renderUserArea(); renderComments();
+    saveSession({ username: found.username, role: found.role }); authModal.setAttribute('aria-hidden','true'); renderUserArea(); renderComments(); renderHistory(); updateForumStatus();
   });
 
 
@@ -503,8 +502,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const HISTORY_KEY = 'bizlearn_sim_history_v1';
 
-  function loadHistory(){ try{ const raw = localStorage.getItem(HISTORY_KEY); return raw ? JSON.parse(raw) : []; }catch(e){ return []; } }
-  function saveHistory(list){ localStorage.setItem(HISTORY_KEY, JSON.stringify(list)); }
+  function getUserHistoryKey(){ const sess = loadSession(); return sess ? `${HISTORY_KEY}_user_${sess.username}` : HISTORY_KEY; }
+  function loadHistory(){ try{ const raw = localStorage.getItem(getUserHistoryKey()); return raw ? JSON.parse(raw) : []; }catch(e){ return []; } }
+  function saveHistory(list){ localStorage.setItem(getUserHistoryKey(), JSON.stringify(list)); }
 
   function renderHistory(){
     const list = loadHistory();
@@ -553,7 +553,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(()=>{ $resultArea.innerHTML = prev; }, 900);
   }
 
-  function clearHistory(){ if(!confirm('Bersihkan seluruh riwayat simulasi?')) return; localStorage.removeItem(HISTORY_KEY); renderHistory(); }
+  function clearHistory(){ if(!confirm('Bersihkan seluruh riwayat simulasi?')) return; localStorage.removeItem(getUserHistoryKey()); renderHistory(); }
 
   function exportHistoryCsv(){
     const list = loadHistory(); if(list.length === 0){ alert('Tidak ada riwayat untuk diekspor.'); return; }
@@ -664,8 +664,21 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
   }
 
+  function updateForumStatus(){
+    const statusEl = document.getElementById('forum-user-status');
+    if(!statusEl) return;
+    
+    const sess = loadSession();
+    if(sess){
+      statusEl.innerHTML = `<span style="color: var(--primary); font-weight: 600;">✓ Masuk sebagai: ${escapeHtml(sess.username)}</span>`;
+    } else {
+      statusEl.innerHTML = `<span style="color: #6b7280;">⚠️ <a href="#" onclick="document.getElementById('user-area').querySelector('button').click(); return false;" style="color: var(--primary); text-decoration: underline;">Login diperlukan</a> untuk mengirim pesan</span>`;
+    }
+  }
+
   function renderComments(){
     const list = loadComments();
+    updateForumStatus();
     $comments.innerHTML = '';
     if(list.length===0){
       $comments.innerHTML = '<p class="muted">Belum ada komentar. Jadilah yang pertama!</p>';
@@ -698,7 +711,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   $btnPost.addEventListener('click', ()=>{
     const sess = loadSession();
-    const name = sess ? sess.username : ($name.value.trim() || 'Anonim');
+    if(!sess){ 
+      alert('Silakan login terlebih dahulu untuk mengirim pesan.'); 
+      authModal.setAttribute('aria-hidden','false'); 
+      authLoginBox.style.display='block'; 
+      authRegisterBox.style.display='none'; 
+      authFeedback.textContent=''; 
+      return; 
+    }
+    
+    const name = sess.username;
     const message = $message.value.trim();
     if(!message){ alert('Masukkan pesan terlebih dahulu.'); return; }
 
