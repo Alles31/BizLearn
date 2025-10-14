@@ -190,6 +190,8 @@ function clearSession(){ localStorage.removeItem(SESSION_KEY); }
 function renderBlogUserArea(){
   const root = document.getElementById('user-area');
   if(!root) return;
+  // If app.js has already populated user-area (button or username), do not override.
+  if(root.children && root.children.length > 0){ return; }
   const sess = loadSession();
   root.innerHTML = '';
   if(!sess){

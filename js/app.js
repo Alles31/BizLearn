@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const learnMoreBtn = document.getElementById('learn-more');
 
   function renderArticles(){
+    if(!articlesList) return; // guard for pages without articles section
     articlesList.innerHTML = '';
     articles.forEach(a => {
       const card = document.createElement('article');
@@ -47,10 +48,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  modalClose.addEventListener('click', () => modal.setAttribute('aria-hidden','true'));
-  modal.addEventListener('click', (e)=>{ if(e.target===modal) modal.setAttribute('aria-hidden','true') });
+  if(modalClose && modal) modalClose.addEventListener('click', () => modal.setAttribute('aria-hidden','true'));
+  if(modal) modal.addEventListener('click', (e)=>{ if(e.target===modal) modal.setAttribute('aria-hidden','true') });
 
-  renderArticles();
+  if(articlesList) renderArticles();
 
 
   if(learnMoreBtn){
@@ -270,7 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.__lastSimResult = lastResult;
   }
 
-  $btnHitung.addEventListener('click', runSimulation);
+  if($btnHitung) $btnHitung.addEventListener('click', runSimulation);
 
   const simFields = Array.from(document.querySelectorAll('.sim-field'));
   function setModeFields(mode){
@@ -399,6 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   function renderSimInfo(mode){
+    if(!simInfoEl) return; // guard for pages without sim info panel
     const info = SIM_EXPLANATIONS[mode] || SIM_EXPLANATIONS.profit;
     simInfoEl.innerHTML = `<div class="card"><h4 style="margin:0 0 8px">${info.title}</h4><div class="muted">${info.body}</div></div>`;
   }
@@ -465,6 +467,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderUserArea(){ const sess = loadSession(); if(!userArea) return; userArea.innerHTML = ''; if(!sess){ const a = document.createElement('button'); a.className='btn ghost'; a.textContent='Masuk'; a.addEventListener('click', ()=>{ authModal.setAttribute('aria-hidden','false'); authLoginBox.style.display='block'; authRegisterBox.style.display='none'; authFeedback.textContent=''; }); userArea.appendChild(a); } else { const span = document.createElement('div'); span.style.display='flex'; span.style.alignItems='center'; span.style.gap='8px'; span.innerHTML = `<div style="color:#fff;font-weight:700">${escapeHtml(sess.username)}</div>`; const btnOut = document.createElement('button'); btnOut.className='btn small'; btnOut.textContent='Keluar'; btnOut.addEventListener('click', ()=>{ clearSession(); renderUserArea(); renderComments(); renderHistory(); }); span.appendChild(btnOut); userArea.appendChild(span); } updateForumStatus(); }
   renderUserArea();
+  // Fallback: if user-area is still empty shortly after load, inject a simple Masuk button
+  setTimeout(()=>{
+    try{
+      const root = userArea;
+      if(!root) return;
+      if(root.children.length === 0 && (!loadSession())){
+        const a = document.createElement('button');
+        a.className = 'btn ghost';
+        a.textContent = 'Masuk';
+        a.addEventListener('click', ()=>{
+          if(authModal){
+            authModal.setAttribute('aria-hidden','false');
+            if(authLoginBox){ authLoginBox.style.display='block'; }
+            if(authRegisterBox){ authRegisterBox.style.display='none'; }
+            if(authFeedback){ authFeedback.textContent=''; }
+          }
+        });
+        root.appendChild(a);
+      }
+    }catch(e){ /* noop */ }
+  }, 150);
+
+  // Keep header in sync when session changes across tabs/pages
+  window.addEventListener('storage', (e)=>{
+    if(e.key === SESSION_KEY){ renderUserArea(); }
+  });
 
   if(authClose) authClose.addEventListener('click', ()=>{ authModal.setAttribute('aria-hidden','true'); });
   if(showLogin) showLogin.addEventListener('click', ()=>{ authLoginBox.style.display='block'; authRegisterBox.style.display='none'; authFeedback.textContent=''; });
@@ -507,6 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function saveHistory(list){ localStorage.setItem(getUserHistoryKey(), JSON.stringify(list)); }
 
   function renderHistory(){
+    if(!$historyList || !$historyEmpty) return; // guard for pages without history UI
     const list = loadHistory();
     $historyList.innerHTML = '';
     if(list.length === 0){ $historyEmpty.style.display = 'block'; return; } else { $historyEmpty.style.display = 'none'; }
@@ -677,6 +706,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderComments(){
+    // guard for pages without forum UI
+    if(!$comments){ updateForumStatus(); return; }
     const list = loadComments();
     updateForumStatus();
     $comments.innerHTML = '';
@@ -709,7 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 
-  $btnPost.addEventListener('click', ()=>{
+  if($btnPost) $btnPost.addEventListener('click', ()=>{
     const sess = loadSession();
     if(!sess){ 
       alert('Silakan login terlebih dahulu untuk mengirim pesan.'); 
@@ -731,13 +762,13 @@ document.addEventListener('DOMContentLoaded', () => {
     renderComments();
   });
 
-  $btnClear.addEventListener('click', ()=>{
+  if($btnClear) $btnClear.addEventListener('click', ()=>{
     if(!confirm('Hapus semua komentar dari localStorage?')) return;
     localStorage.removeItem(STORAGE_KEY);
     renderComments();
   });
 
   renderComments();
-  // render saved sim history on load
+  // render saved sim history on load (safe on pages without history UI)
   renderHistory();
 });
