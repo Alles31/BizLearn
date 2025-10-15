@@ -17,14 +17,18 @@ function saveComments(obj) {
 
 function renderArticles(filter) {
   const container = document.getElementById('user-articles');
+  if(!container) return;
+  
   container.innerHTML = '';
   const articles = getArticles();
   const q = String(filter || '').trim().toLowerCase();
   const filtered = q ? articles.filter(a => a.title.toLowerCase().includes(q)) : articles;
+  
   if (!filtered.length) {
-    container.innerHTML = '<p>Belum ada artikel yang cocok.</p>';
+    container.innerHTML = '<div class="card" style="grid-column: 1/-1; text-align:center; padding:48px"><p class="muted">Belum ada artikel. <a href="create-blog.html" style="color:var(--primary); font-weight:600">Buat artikel pertama!</a></p></div>';
     return;
   }
+  
   filtered.forEach((art, idx) => {
     const globalIndex = articles.indexOf(art);
     const card = document.createElement('div');

@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
-    <title>Blog Bersama</title>
+    <title>Buat Artikel — BizLearn</title>
 </head>
 <body>
     <header class="site-header">
       <div class="container header-inner">
-        <a href="#home" class="brand">
+        <a href="index.html" class="brand">
           <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
             <rect x="3" y="7" width="18" height="11" rx="2" fill="#fff" />
             <path d="M3 7l2-3h14l2 3" stroke="#0b6fb2" stroke-width="1.2" fill="none" />
@@ -33,21 +33,50 @@
         <div id="user-area"></div>
       </div>
     </header>
+    
     <main>
       <section class="section">
         <div class="container">
-          <h2>📚 Artikel Pengguna</h2>
+          <h2>✍️ Buat Artikel Baru</h2>
           <p class="muted" style="margin-top:8px">
-            Jelajahi artikel dan pengalaman dari komunitas BizLearn. 
-            <a href="create-blog.html" style="color: var(--primary); font-weight:600">✍️ Buat artikel baru</a>
+            <strong>Tips membuat artikel yang baik:</strong> gunakan judul yang jelas dan menarik, tulis deskripsi singkat yang merangkum isi artikel, gunakan bahasa yang sopan dan ramah, sertakan gambar atau sumber jika perlu, dan selalu baca ulang sebelum memposting.
           </p>
+          
+          <form id="form-article" class="card" style="margin-top:24px; max-width:800px">
+            <label>Judul Artikel <span style="color:#ef4444">*</span></label>
+            <input id="input-title" type="text" required placeholder="Contoh: Tips Memulai Bisnis Online dari Nol" />
+            
+            <label>Deskripsi Singkat <span style="color:#ef4444">*</span></label>
+            <input id="input-desc" type="text" required placeholder="Ringkasan artikel dalam 1-2 kalimat" />
+            
+            <label>URL Gambar (opsional)</label>
+            <input id="input-image" type="text" placeholder="https://example.com/image.jpg atau images/art1.svg" />
+            <small class="muted">Gunakan URL gambar eksternal atau path lokal dari folder images/</small>
+            
+            <label style="margin-top:12px">Isi Artikel <span style="color:#ef4444">*</span></label>
+            <textarea id="input-content" rows="8" required placeholder="Tulis konten artikel lengkap di sini...
 
-          <div style="display:flex;align-items:center;gap:12px;margin:24px 0 16px 0">
-            <input id="search-articles" type="search" placeholder="🔍 Cari artikel berdasarkan judul..." style="flex:1; max-width:500px" />
-            <button id="clear-search" class="btn ghost" style="display:none">Bersihkan</button>
+Beberapa tips:
+- Gunakan paragraf pendek untuk kemudahan membaca
+- Sertakan contoh atau pengalaman nyata
+- Akhiri dengan kesimpulan atau call-to-action"></textarea>
+            
+            <div style="display:flex;gap:12px;margin-top:16px">
+              <button type="submit" class="btn primary">📮 Posting Artikel</button>
+              <button type="reset" class="btn ghost">🔄 Reset Form</button>
+              <a href="blog.html" class="btn ghost">📚 Lihat Semua Artikel</a>
+            </div>
+          </form>
+
+          <div class="card" style="margin-top:24px; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-left: 4px solid var(--primary);">
+            <h4 style="margin:0 0 8px; color: var(--primary)">💡 Panduan Cepat</h4>
+            <ul style="margin:0; padding-left:20px; color: var(--muted)">
+              <li>Artikel akan langsung muncul di halaman "Lihat Artikel"</li>
+              <li>Semua pengguna dapat melihat dan berkomentar pada artikelmu</li>
+              <li>Data tersimpan di browser (localStorage) - backup secara berkala</li>
+              <li>Kamu bisa menghapus artikelmu sendiri kapan saja</li>
+            </ul>
           </div>
-
-          <div id="user-articles" class="articles-grid" style="margin-bottom:32px"></div>
         </div>
       </section>
     </main>
@@ -84,7 +113,7 @@
       </div>
     </div>
 
-  <script src="js/app.js" defer></script>
-  <script src="js/blog.js" defer></script>
+    <script src="js/app.js" defer></script>
+    <script src="js/blog.js" defer></script>
 </body>
 </html>

@@ -21,7 +21,13 @@
           <a href="index.html">Home</a>
           <a href="simulasi.html">Simulasi</a>
           <a href="about.html">About</a>
-          <a href="blog.html">Blog Pengguna</a>
+          <div class="dropdown">
+            <a href="#" class="dropdown-toggle">Blog ▼</a>
+            <div class="dropdown-menu">
+              <a href="create-blog.html">✍️ Buat Artikel</a>
+              <a href="blog.html">📚 Lihat Artikel</a>
+            </div>
+          </div>
         </nav>
         <div id="user-area"></div>
       </div>
@@ -110,17 +116,17 @@
         </div>
         <div id="auth-login" style="display:none">
           <label>Username</label>
-          <input id="login-username" type="text" />
+          <input id="login-username" type="text" placeholder="Masukkan username" />
           <label>Password</label>
-          <input id="login-password" type="password" />
-          <div style="display:flex;gap:8px;margin-top:8px"><button id="btn-login" class="btn primary">Masuk</button></div>
+          <input id="login-password" type="password" placeholder="Masukkan password" />
+          <div style="display:flex;gap:8px;margin-top:12px"><button id="btn-login" class="btn primary">Masuk</button></div>
         </div>
         <div id="auth-register" style="display:none">
           <label>Username</label>
-          <input id="reg-username" type="text" />
+          <input id="reg-username" type="text" placeholder="Buat username" />
           <label>Password</label>
-          <input id="reg-password" type="password" />
-          <div style="display:flex;gap:8px;margin-top:8px"><button id="btn-register" class="btn primary">Daftar</button></div>
+          <input id="reg-password" type="password" placeholder="Buat password" />
+          <div style="display:flex;gap:8px;margin-top:12px"><button id="btn-register" class="btn primary">Daftar</button></div>
         </div>
         <div id="auth-feedback" style="margin-top:10px" class="muted"></div>
       </div>

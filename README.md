@@ -11,6 +11,8 @@ Fitur utama:
 Cara menjalankan:
 1. Buka file `index.html` di browser (cukup klik dua kali atau gunakan "Open with" di file manager).
 
+2. Gunakan link github atau hostinger yang sudah ada
+
 Note : Dikarnakan kekurangan waktu saya menggunakan localhost agar aplikasi ini mudah dibuat untuk demonya, setiap tombol dan fungsi di website ini semuanya berguna dan setiap penyimpanan semua ditaru di localhost. Saya harap hal ini bisa dimaklumi.
 
 1. Fitur Utama Otentikasi
