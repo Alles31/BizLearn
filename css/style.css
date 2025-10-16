@@ -156,6 +156,23 @@ body {
   }
 }
 
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+  margin-left: auto;
+}
+
+.mobile-menu-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
 /* Articles grid layout */
 .articles-grid {
   display: grid;
@@ -172,6 +189,73 @@ body {
   .dropdown-menu {
     left: auto;
     right: 0;
+  }
+  
+  /* Mobile Navigation */
+  .mobile-menu-toggle {
+    display: block;
+  }
+  
+  .nav {
+    display: none;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: var(--primary);
+    flex-direction: column;
+    padding: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 50;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 300ms ease;
+  }
+  
+  .nav.active {
+    display: flex;
+    max-height: 400px;
+  }
+  
+  .nav a, .dropdown-toggle {
+    padding: 16px 20px;
+    width: 100%;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  .nav a:hover, .dropdown-toggle:hover {
+    background: rgba(255,255,255,0.1);
+    border-radius: 0;
+  }
+  
+  .dropdown {
+    display: block;
+    position: relative;
+  }
+  
+  .dropdown-menu {
+    position: static;
+    box-shadow: none;
+    background: rgba(0,0,0,0.1);
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  .dropdown-menu a {
+    padding-left: 40px;
+    color: rgba(255,255,255,0.9);
+    background: transparent;
+  }
+  
+  .dropdown-menu a:hover {
+    background: rgba(255,255,255,0.1);
+    color: white;
+    padding-left: 44px;
+  }
+  
+  .dropdown.active .dropdown-menu {
+    display: block;
   }
 }
 
@@ -553,5 +637,168 @@ h2 {
 
   .nav {
     display: none;
+  }
+  
+  /* Mobile responsive adjustments */
+  .container {
+    padding: 12px;
+  }
+  
+  h1 {
+    font-size: 24px;
+  }
+  
+  h2 {
+    font-size: 20px;
+  }
+  
+  h3 {
+    font-size: 18px;
+  }
+  
+  .hero {
+    padding: 24px 0;
+  }
+  
+  .hero-text h1 {
+    font-size: 22px;
+  }
+  
+  .lead {
+    font-size: 14px;
+  }
+  
+  .hero-cta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .hero-cta .btn {
+    width: 100%;
+    margin: 0;
+    text-align: center;
+  }
+  
+  .section {
+    padding: 24px 0;
+  }
+  
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .card {
+    padding: 14px;
+  }
+  
+  .modal-content {
+    margin: 20px;
+    max-width: calc(100% - 40px);
+    padding: 16px;
+  }
+  
+  .sim-grid {
+    gap: 12px;
+  }
+  
+  .result-card {
+    order: 2;
+  }
+  
+  /* Form inputs mobile optimization */
+  input, textarea, select {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+  
+  .btn {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  .btn.small {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+  
+  /* Articles slider mobile */
+  .slider-track .card {
+    min-width: 240px;
+  }
+  
+  /* Forum mobile */
+  .forum-actions {
+    flex-direction: column;
+  }
+  
+  .forum-actions .btn {
+    width: 100%;
+  }
+  
+  /* Simulation form mobile */
+  .sim-field input {
+    width: 100%;
+  }
+  
+  /* Header mobile adjustments */
+  .header-inner {
+    padding: 0 12px;
+  }
+  
+  .brand span {
+    font-size: 16px;
+  }
+  
+  .brand svg {
+    width: 28px;
+    height: 28px;
+  }
+  
+  #user-area .btn {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+  
+  #user-area {
+    order: -1;
+    margin-right: auto;
+    margin-left: 8px;
+  }
+  
+  #user-area > div {
+    font-size: 13px;
+  }
+  
+  #user-area > div > div {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  /* Auth modal mobile */
+  #auth-modal .modal-content {
+    max-width: 90%;
+  }
+  
+  /* About page cards */
+  .about-card {
+    padding: 12px;
+  }
+  
+  /* Blog grid mobile */
+  .articles-grid {
+    gap: 12px;
+  }
+  
+  /* Simulation materials table */
+  #sim-print-area table {
+    font-size: 13px;
+  }
+  
+  #sim-print-area table th,
+  #sim-print-area table td {
+    padding: 6px 4px;
   }
 }

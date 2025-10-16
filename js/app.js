@@ -771,4 +771,37 @@ document.addEventListener('DOMContentLoaded', () => {
   renderComments();
   // render saved sim history on load (safe on pages without history UI)
   renderHistory();
+  
+  // Mobile menu toggle
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mainNav = document.getElementById('main-nav');
+  const blogDropdown = document.getElementById('blog-dropdown');
+  
+  if(mobileMenuBtn && mainNav){
+    mobileMenuBtn.addEventListener('click', ()=>{
+      mainNav.classList.toggle('active');
+      mobileMenuBtn.textContent = mainNav.classList.contains('active') ? '✕' : '☰';
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', (e)=>{
+      if(!e.target.closest('.header-inner') && mainNav.classList.contains('active')){
+        mainNav.classList.remove('active');
+        mobileMenuBtn.textContent = '☰';
+      }
+    });
+    
+    // Handle dropdown in mobile
+    if(blogDropdown){
+      const dropdownToggle = blogDropdown.querySelector('.dropdown-toggle');
+      if(dropdownToggle){
+        dropdownToggle.addEventListener('click', (e)=>{
+          if(window.innerWidth <= 800){
+            e.preventDefault();
+            blogDropdown.classList.toggle('active');
+          }
+        });
+      }
+    }
+  }
 });
